@@ -1,0 +1,48 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h3>Book Copy</h3>
+<hr />
+
+  {% if bookinstance.book %}
+    <p><strong>Book: {{ bookinstance.book.title }}</strong></p>
+    <details>
+      <summary><strong>Summary</strong></summary>
+      <p>{{ bookinstance.book.summary }}</p>
+    </details>
+    <br />
+    <p><strong>ISBN:</strong> {{ bookinstance.book.isbn }} /
+    <strong>Language:</strong> {% if bookinstance.book.language %}{{ bookinstance.book.language }}{% endif %} /
+    <strong>Genre:</strong> {% for genre in bookinstance.book.genre.all %} {{ genre }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+    {% if bookinstance.book.author %}
+    <hr />
+    <p><strong>Author:</strong>
+      <a href="{% url 'author-detail' bookinstance.book.author.pk %}">
+      {{ bookinstance.book.author.first_name}} {{bookinstance.book.author.last_name}}
+      </a>
+    </p>
+    {% endif %}
+  {% else %}
+    No book attached
+  {% endif %}
+  <hr />
+  <p><strong>Copy:</strong></p>
+  <p class="{% if bookinstance.status == 'a' %}text-success{% elif bookinstance.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
+    Status: {{ bookinstance.get_status_display }}
+  </p>
+  {% if bookinstance.status != 'a' and bookinstance.status != 'r' %}
+    <p><strong>Due to be returned:</strong>
+      <span class="{% if bookinstance.is_overdue %}text-danger{% endif %}"> {{bookinstance.due_back}}</<span>
+    </p>
+  {% endif %}
+  <p><strong>Imprint:</strong> {{bookinstance.imprint}}</p>
+  <p class="text-muted">
+    <strong>Id:</strong> {{bookinstance.id}}
+  </p>
+  {% if perms.catalog.can_edit_book %}
+  <hr />
+  <p><a href="{% url 'bookinstance-update' bookinstance.id %}">Update Book Copy</a> -
+  <a href="{% url 'bookinstance-delete' bookinstance.id %}">Delete Book Copy</a></p>
+  {% endif %}
+{% endblock %}

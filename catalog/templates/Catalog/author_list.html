@@ -1,0 +1,31 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>Author List</h2>
+  {% if author_list %}
+  <ul>
+    {% for author in author_list %}
+      <li>
+        <a href="{% url 'author-detail' author.pk %}">{{ author.first_name}} {{author.last_name}}
+          ({{author.date_of_birth}} -
+          {% if author.date_of_death %}
+          {{author.date_of_death}}
+          {% endif %}
+          )</a>
+          ({{author.book_set.count}}
+          {% if author.book_set.count > 1 %}
+          books
+          {% else %}
+          book
+          {% endif %}
+          )
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no authors in the library site.</p>
+  {% endif %}
+  {% if perms.catalog.can_edit_author %}
+  <p><a href="{% url 'author-create' %}">Add author</a></p>
+  {% endif %}
+{% endblock %}

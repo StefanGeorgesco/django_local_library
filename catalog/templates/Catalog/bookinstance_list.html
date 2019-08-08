@@ -1,0 +1,78 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>Book copies List</h2>
+  {% if bookinstance_list %}
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Book Title</th>
+            <th>ISBN</th>
+            <th>Language</th>
+            <th>Genre</th>
+            <th>Author</th>
+            <th>Imprint</th>
+            <th>Status</th>
+            <th>Due back</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for bookinstance in bookinstance_list %}
+          <tr>
+            <td>
+              <a href="{% url 'bookinstance-detail' bookinstance.id %}">
+                {% if perms.catalog.can_edit_book %}
+                  <i class="fas fa-pen"></i>
+                {% else %}
+                  <i class="fas fa-eye"></i>
+                {% endif %}
+              </a>
+            </td>
+            <td>{% if bookinstance.book %}{{ bookinstance.book.title }}{% endif %}</td>
+            <td>{% if bookinstance.book %}{{ bookinstance.book.isbn }}{% endif %}</td>
+            <td>
+              {% if bookinstance.book %}
+                {% if bookinstance.book.language %}
+                  {{ bookinstance.book.language }}
+                {% endif %}
+              {% endif %}
+            </td>
+            <td>
+              {% if bookinstance.book %}
+                {% for genre in bookinstance.book.genre.all %}
+                  {{ genre }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              {% endif %}
+            </td>
+            <td>
+              {% if bookinstance.book %}
+                {% if bookinstance.book.author %}
+                  <a href="{% url 'author-detail' bookinstance.book.author.pk %}">
+                  {{ bookinstance.book.author.first_name}} {{bookinstance.book.author.last_name}}
+                  </a>
+                {% endif %}
+              {% endif %}
+            </td>
+            <td>{{ bookinstance.imprint }}</td>
+            <td class="{% if bookinstance.status == 'a' %}text-success{% elif bookinstance.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
+              {{ bookinstance.get_status_display }}
+            </td>
+            <td class="{% if bookinstance.is_overdue %}text-danger{% endif %}">
+              {% if bookinstance.due_back %}{{ bookinstance.due_back }}{% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  {% else %}
+    <p>There are no book copies in the library.</p>
+  {% endif %}
+{% if perms.catalog.can_edit_book %}
+<hr />
+<p><a href="{% url 'bookinstance-create' %}">Add Book Copy</a></p>
+{% endif %}
+{% endblock %}
+
+{% block right %}{% endblock %}

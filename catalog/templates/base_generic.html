@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block title %}<title>Local Library</title>{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <!-- Add additional CSS in static file -->
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-2">
+      {% block sidebar %}
+        <ul class="sidebar-nav">
+          <li><a href="{% url 'index' %}">Home</a></li>
+          <li><a href="{% url 'books' %}">All books</a></li>
+          <li><a href="{% url 'bookinstances' %}">All copies</a></li>
+          <li><a href="{% url 'authors' %}">All authors</a></li>
+        </ul>
+        {% if perms.catalog.can_mark_returned %}
+        <ul class="sidebar-nav">
+          <li>Staff</li>
+          <li><a href="{% url 'all-borrowed' %}">All Borrowed</a></li>
+        </ul>
+        {% endif %}
+        <ul class="sidebar-nav">
+          {% if user.is_authenticated %}
+          <li>User: {{ user.get_username }}</li>
+          <li><a href="{% url 'my-borrowed' %}">My Borrowed</a></li>
+          <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+          {% else %}
+          <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+          {% endif %}
+        </ul>
+        <img src="{% static 'images/new-york-city-public-library-1465661302j3d.jpg' %}" style="width: 16%; position: fixed; bottom: 10px"/>
+     {% endblock %}
+      </div>
+      <div class="col-sm-10">
+        {% block content %}{% endblock %}
+        {% block pagination %}
+          {% if is_paginated %}
+            <div class="container">
+              <ul class="pagination">
+              {% if page_obj.has_previous %}
+                <li class="page-item">
+                <a class="page-link" href="{{ request.path }}?page=1"><<</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}"><</a>
+                </li>
+              {% endif %}
+              {% for page in page_obj.paginator.page_range %}
+              <li class="page-item {% if page == page_obj.number %}active{% endif %}">
+                <a class="page-link" href="{{ request.path }}?page={{ page }}">{{ page }}</a>
+              </li>
+              {% endfor %}
+              {% if page_obj.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">></a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="{{ request.path }}?page={{ page_obj.paginator.num_pages }}">>></a>
+                </li>
+              {% endif %}
+            </ul>
+            </div>
+          {% endif %}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
