@@ -7,11 +7,22 @@
     {% for author in author_list %}
       <li>
         <a href="{% url 'author-detail' author.pk %}">{{ author.first_name}} {{author.last_name}}
-          ({{author.date_of_birth}} -
-          {% if author.date_of_death %}
-          {{author.date_of_death}}
+          {% if author.date_of_birth or author.date_of_death %}
+          (
           {% endif %}
-          )</a>
+          {% if author.date_of_birth %}
+          {{ author.date_of_birth }}
+          {% endif %}
+          {% if author.date_of_birth or author.date_of_death %}
+           -
+          {% endif %}
+          {% if author.date_of_death %}
+          {{ author.date_of_death }}
+          {% endif %}
+          {% if author.date_of_birth or author.date_of_death %}
+          )
+          {% endif %}
+          </a>
           ({{author.book_set.count}}
           {% if author.book_set.count > 1 %}
           books

@@ -3,9 +3,15 @@
 {% block content %}
   <h2>{{ author.first_name}} {{author.last_name}}</h2>
 
-  <p>{{author.date_of_birth}} -
+  <p>
+    {% if author.date_of_birth %}
+    {{ author.date_of_birth }}
+    {% endif %}
+    {% if author.date_of_birth or author.date_of_death %}
+     -
+    {% endif %}
     {% if author.date_of_death %}
-    {{author.date_of_death}}
+    {{ author.date_of_death }}
     {% endif %}
   </p>
 
