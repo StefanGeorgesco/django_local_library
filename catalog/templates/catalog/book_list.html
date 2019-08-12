@@ -23,8 +23,19 @@
             <li>
               {{ copy.imprint }}
               {% if copy.language %}, {{ copy.language }}{% endif %}
-              {% if copy.status %}, {{ copy.get_status_display }}{% endif %}
-              {% if copy.due_back %}, due back: {{ copy.due_back }}{% endif %}
+                {% if copy.status %}
+                ,
+                <span class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
+                  {{ copy.get_status_display }}
+                </span>
+              {% endif %}
+              {% if copy.due_back %}
+              ,
+              <span class="{% if copy.is_overdue %}text-danger{% endif %}">
+              due back:
+                  {{copy.due_back}}
+                </span>
+              {% endif %}
               <a href="{% url 'bookinstance-detail' copy.id %}">View</a>
             </li>
           {% endfor %}

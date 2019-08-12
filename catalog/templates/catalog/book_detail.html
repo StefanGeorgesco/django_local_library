@@ -34,7 +34,9 @@
       </p>
       {% if copy.status != 'a' and copy.status != 'r' %}
         <p><strong>Due to be returned:</strong>
-          <span class="{% if copy.is_overdue %}text-danger{% endif %}"> {{copy.due_back}}</<span>
+          <span class="{% if copy.is_overdue %}text-danger{% endif %}">
+             {{copy.due_back}}
+          </span>
         </p>
       {% endif %}
       <p><strong>Imprint:</strong> {{copy.imprint}}</p>
