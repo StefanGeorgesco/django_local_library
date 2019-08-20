@@ -633,9 +633,8 @@ class AllBorrowedListViewTest(TestCase):
 
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(reverse('all-borrowed'))
-        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(response.url.startswith('/accounts/login/'))
+        self.assertRedirects(response, '/accounts/login/?next=/catalog/allborrowed/')
 
     def test_forbidden_if_logged_in_but_not_correct_permission(self):
         login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
@@ -784,9 +783,8 @@ class RenewBookInstancesViewTest(TestCase):
 
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(reverse('renew-book-librarian', kwargs={'pk': self.test_bookinstance1.pk}))
-        # Manually check redirect (Can't use assertRedirect, because the redirect URL is unpredictable)
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(response.url.startswith('/accounts/login/'))
+        self.assertRedirects(response, f'/accounts/login/?next=/catalog/book/{self.test_bookinstance1.pk}/renew/')
 
     def test_redirect_if_logged_in_but_not_correct_permission(self):
         login = self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
