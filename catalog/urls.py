@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
   path('', views.index, name='index'),
+  path('genres/', views.GenreListView.as_view(), name='genres'),
+  path('languages/', views.LanguageListView.as_view(), name='languages'),
   path('books/', views.BookListView.as_view(), name='books'),
   path('book/<int:pk>', views.BookDetailView.as_view(), name='book-detail'),
   path('bookinstances/', views.BookInstanceListView.as_view(), name='bookinstances'),
@@ -12,6 +14,12 @@ urlpatterns = [
   path('mybooks/', views.LoanedBooksByUserListView.as_view(), name='my-borrowed'),
   path('allborrowed/', views.AllBorrowedListView.as_view(), name='all-borrowed'),
   path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
+  path('genre/create/', views.GenreCreate.as_view(), name='genre-create'),
+  path('genre/<int:pk>/update/', views.GenreUpdate.as_view(), name='genre-update'),
+  path('genre/<int:pk>/delete', views.GenreDelete.as_view(), name='genre-delete'),
+  path('language/create/', views.LanguageCreate.as_view(), name='language-create'),
+  path('language/<int:pk>/update/', views.LanguageUpdate.as_view(), name='language-update'),
+  path('language/<int:pk>/delete', views.LanguageDelete.as_view(), name='language-delete'),
   path('author/create/', views.AuthorCreate.as_view(), name='author-create'),
   path('author/<int:pk>/update/', views.AuthorUpdate.as_view(), name='author-update'),
   path('author/<int:pk>/delete', views.AuthorDelete.as_view(), name='author-delete'),

@@ -15,6 +15,9 @@ class Genre(models.Model):
         """String for representing the Model object."""
         return self.name
 
+    class Meta:
+        ordering = ['name']
+
 class Language(models.Model):
     """Model representing a language used in the original version of the book and in a book instance."""
     name = models.CharField(_('language'), max_length=40, help_text=_('Enter a language (e.g. English)'))
@@ -22,6 +25,9 @@ class Language(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return self.name
+
+    class Meta:
+        ordering = ['name']
 
 class Book(models.Model):
     """Model representing a book (but not a specific copy of a book)."""

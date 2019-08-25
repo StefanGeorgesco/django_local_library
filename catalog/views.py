@@ -53,6 +53,14 @@ def index(request):
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
 
+class GenreListView(generic.ListView): # add test case
+    model = Genre
+    paginate_by = 10
+
+class LanguageListView(generic.ListView): # add test case
+    model = Language
+    paginate_by = 10
+
 class BookListView(generic.ListView):
     model = Book
     paginate_by = 10
@@ -125,6 +133,40 @@ def renew_book_librarian(request, pk):
     }
 
     return render(request, 'catalog/book_renew_librarian.html', context)
+
+class GenreCreate(PermissionRequiredMixin, generic.edit.CreateView):
+    permission_required = 'catalog.can_edit_book'
+    model = Genre
+    fields = '__all__'
+    success_url = reverse_lazy('genres')
+
+class GenreUpdate(PermissionRequiredMixin, generic.edit.UpdateView):
+    permission_required = 'catalog.can_edit_book'
+    model = Genre
+    fields = '__all__'
+    success_url = reverse_lazy('genres')
+
+class GenreDelete(PermissionRequiredMixin, generic.edit.DeleteView):
+    permission_required = 'catalog.can_edit_book'
+    model = Genre
+    success_url = reverse_lazy('genres')
+
+class LanguageCreate(PermissionRequiredMixin, generic.edit.CreateView):
+    permission_required = 'catalog.can_edit_book'
+    model = Language
+    fields = '__all__'
+    success_url = reverse_lazy('languages')
+
+class LanguageUpdate(PermissionRequiredMixin, generic.edit.UpdateView):
+    permission_required = 'catalog.can_edit_book'
+    model = Language
+    fields = '__all__'
+    success_url = reverse_lazy('languages')
+
+class LanguageDelete(PermissionRequiredMixin, generic.edit.DeleteView):
+    permission_required = 'catalog.can_edit_book'
+    model = Language
+    success_url = reverse_lazy('languages')
 
 class AuthorCreate(PermissionRequiredMixin, generic.edit.CreateView):
     permission_required = 'catalog.can_edit_author'
