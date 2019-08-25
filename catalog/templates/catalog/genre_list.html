@@ -1,15 +1,15 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h2>Genre List</h2>
+  <h2>Genres</h2>
   {% if genre_list %}
   <ul>
     {% for genre in genre_list %}
       <li>
         {{ genre.name}}
         {% if perms.catalog.can_edit_book %}
-          - <a href="{% url 'genre-update' genre.id %}">Update genre</a>
-          - <a href="{% url 'genre-delete' genre.id %}">Delete genre</a>
+          - <a href="{% url 'genre-update' genre.id %}">Update</a>
+          - <a href="{% url 'genre-delete' genre.id %}">Delete</a>
         {% endif %}
       </li>
     {% endfor %}
@@ -18,6 +18,6 @@
     <p>There are no genres in the library site.</p>
   {% endif %}
   {% if perms.catalog.can_edit_book %}
-  <p><a href="{% url 'genre-create' %}">Add genre</a></p>
+  <p><a href="{% url 'genre-create' %}">Add</a></p>
   {% endif %}
 {% endblock %}

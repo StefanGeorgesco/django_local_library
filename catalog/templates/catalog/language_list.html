@@ -1,15 +1,15 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h2>Language List</h2>
+  <h2>Languages</h2>
   {% if language_list %}
   <ul>
     {% for language in language_list %}
       <li>
         {{ language.name}}
         {% if perms.catalog.can_edit_book %}
-          - <a href="{% url 'language-update' language.id %}">Update language</a>
-          - <a href="{% url 'language-delete' language.id %}">Delete language</a>
+          - <a href="{% url 'language-update' language.id %}">Update</a>
+          - <a href="{% url 'language-delete' language.id %}">Delete</a>
         {% endif %}
       </li>
     {% endfor %}
@@ -18,6 +18,6 @@
     <p>There are no languages in the library site.</p>
   {% endif %}
   {% if perms.catalog.can_edit_book %}
-  <p><a href="{% url 'language-create' %}">Add language</a></p>
+  <p><a href="{% url 'language-create' %}">Add</a></p>
   {% endif %}
 {% endblock %}
